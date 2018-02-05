@@ -1,0 +1,8 @@
+/*
+ Transform a table to a jqGrid.
+ Peter Romianowski <peter.romianowski@optivo.de> 
+ If the first column of the table contains checkboxes or
+ radiobuttons then the jqGrid is made selectable.
+*/
+// Addition - selector can be a class or id
+function tableToGrid(a,b){$(a).each(function(){if(this.grid){return}$(this).width("99%");var n=$(this).width();var p=$("input[type=checkbox]:first",$(this));var h=$("input[type=radio]:first",$(this));var d=p.length>0;var g=!d&&h.length>0;var j=d||g;var i=p.attr("name")||h.attr("name");var l=[];var o=[];$("th",$(this)).each(function(){if(l.length==0&&j){l.push({name:"__selection__",index:"__selection__",width:0,hidden:true});o.push("__selection__")}else{l.push({name:$(this).attr("id")||$(this).html(),index:$(this).attr("id")||$(this).html(),width:$(this).width()||150});o.push($(this).html())}});var f=[];var e=[];var m=[];$("tbody > tr",$(this)).each(function(){var r={};var q=0;$("td",$(this)).each(function(){if(q==0&&j){var s=$("input",$(this));var t=s.attr("value");e.push(t||f.length);if(s.attr("checked")){m.push(t)}r[l[q].name]=s.attr("value")}else{r[l[q].name]=$(this).html()}q++});if(q>0){f.push(r)}});$(this).empty();$(this).addClass("scroll");$(this).jqGrid($.extend({datatype:"local",width:n,colNames:o,colModel:l,multiselect:d},b||{}));for(var k=0;k<f.length;k++){var c=null;if(e.length>0){c=e[k];if(c&&c.replace){c=encodeURIComponent(c).replace(/[.\-%]/g,"_")}}if(c==null){c=k+1}$(this).addRowData(c,f[k])}for(var k=0;k<m.length;k++){$(this).setSelection(m[k])}})};
